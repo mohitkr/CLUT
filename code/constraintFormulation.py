@@ -65,9 +65,6 @@ def tensorIndicator(X,dim,var):
     for i in range(len(dim)):
         outputMatSize.append(len(var[dim[i]]))
         outputMatLoop+=(range(len(var[dim[i]])),)
-#     print "dim: ",dim
-#     print "var: ",var
-#     print "outputMatSize: ",outputMatSize
     outputTensor = np.zeros(outputMatSize)
     for multiIndex in it.product(*outputMatLoop):
         a=[]
@@ -76,7 +73,6 @@ def tensorIndicator(X,dim,var):
             a.append(slice(0,X.shape[i]))
         for i in range(len(dim)):
             a[dim[i]]=multiIndex[i]
-#         print "a: ",a
         if np.count_nonzero(X[tuple(a)])!=0:
             outputTensor[multiIndex]=1
             
@@ -99,17 +95,12 @@ def tensorSum(X,dim,var,ecInd):
             a.append(slice(0,X.shape[i]))
         for i in range(len(dim)):
             a[dim[i]]=multiIndex[i]
-#         print "a: ",tuple(a)
         outputTensor[multiIndex]=np.sum(X[tuple(a)])
     if ecInd==1:
-#         return stats.mode(outputTensor,axis=0)
         return outputTensor.max(axis=0)
-#     print outputTensor.ravel()
-    plt.hist(outputTensor.ravel(),bins='auto')
-    plt.show()
-#     fig = plt.gcf()
+#    plt.hist(outputTensor.ravel(),bins='auto')
+#    plt.show()
     return np.amax(outputTensor), np.amin(outputTensor)
-#     return stats.mode(outputTensor,axis=None), np.amin(outputTensor)
   
 def tensorConsZero(X,dim,var):
     newdim = range(len(X.shape))
@@ -131,7 +122,6 @@ def tensorConsZero(X,dim,var):
             a.append(slice(0,X.shape[i]))
         for i in range(len(dim)):
             a[dim[i]]=multiIndex[i]
-#         print "a: ",tuple(a)
         outputTensor1_min[multiIndex]=minConsZero(X[tuple(a)])
         outputTensor2_min[multiIndex]=minConsNonZero(X[tuple(a)])
         outputTensor1_max[multiIndex]=maxConsZero(X[tuple(a)])
@@ -158,23 +148,11 @@ def split(X,partSet,repeatDim):
     for i in range(1,len(X)):
         lst=list(it.combinations(X, i))
         for j in range(len(lst)):
-#             print lst[j]
             s1=tuple(set(lst[j]+repeatDim))
             s2=[x for x in X if x not in s1]
             s1=(s1,)
             finalSet+=split(s2,s1,repeatDim)
     return finalSet
-
-
-# def splitTensor(arr, cond):
-#     return [arr[cond], arr[~cond]]
-# 
-# a = np.array([1,3,5,7,2,4,6,8])
-# print splitTensor(a, a<5)
-# 
-# a = np.array([[1,2,3],[4,5,6],[7,8,9],[2,4,7]])
-# print splitTensor(a, a[:,0]<3)
-
 
 
 
